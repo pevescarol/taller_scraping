@@ -9,4 +9,11 @@ page = requests.get(pagScrapy, headers=head)
 
 soup = BeautifulSoup(page.text, "html.parser")
 
-print(soup.title.string)
+# print(soup.title.string)
+
+table_crypto = soup.find(class_='genTbl js-all-crypto-preview-table wideTbl elpTbl elp20 topCryptoHP')
+tr_all = table_crypto.find_all('tr', {'i': '1057391'})
+
+price = tr_all[0].find_all('td', {'class': 'price js-currency-price'})
+
+print(f"Valor del Bitcoin (USD): {price[0].get_text()}")
