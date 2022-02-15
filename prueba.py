@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
 pagScrapy = "https://www.investing.com"
 
@@ -21,8 +22,14 @@ price = tr_all[0].find_all('td', {'class': 'price js-currency-price'})
 
 # Extraemos mas de un valor de la tabla
 tr = table_crypto.find_all('tr')
+listSave=[]
 for sub_tr in tr:
     price2 = sub_tr.find_all('td', {'class': 'price js-currency-price'})
     name = sub_tr.find_all('td', {'class': 'left bold elp name cryptoName first js-currency-name'})
     if name!=[]:
         print(f"Valor en {name[0].get_text()} (USD): {price2[0].get_text()}")
+        listSave.append([name[0].get_text(), price[0].get_text().replace(",","")])
+
+
+df = pd.DataFrame(listSave, columns=['Nombre', 'Precio'])
+df.to_csv(r'Criptomonedas.csv', index=False, header=True)
